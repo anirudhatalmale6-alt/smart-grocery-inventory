@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+        "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<!--
+    GlassFish JDBC Resources Configuration
+
+    SETUP INSTRUCTIONS: 
+    ==================
+    Option A: Manual Setup via GlassFish Admin Console (http://localhost:4848)
+
+    1. Go to JDBC > JDBC Connection Pools
+    2. Click "New..." and enter:
+       - Pool Name: SmartGroceryPool
+       - Resource Type: javax.sql.DataSource
+       - Database Driver Vendor: Derby
+    3. Click "Next" and set Additional Properties:
+       - User: APP
+       - Password: APP
+       - DatabaseName: SmartGrocery
+       - ServerName: localhost
+       - PortNumber: 1527
+       - connectionAttributes: ;create=true
+    4. Go to JDBC > JDBC Resources
+    5. Click "New..." and enter:
+       - JNDI Name: jdbc/SmartGroceryPool
+       - Pool Name: SmartGroceryPool
+
+    Option B: Use the existing DerbyPool
+
+    1. Go to JDBC > JDBC Connection Pools > DerbyPool > Additional Properties
+    2. Change DatabaseName to: SmartGrocery
+    3. Set User to: APP
+    4. Set Password to: APP
+    5. Ensure JDBC Resource jdbc/SmartGroceryPool exists pointing to DerbyPool
+-->
+<resources>
+    <jdbc-connection-pool name="SmartGroceryPool"
+                          res-type="javax.sql.DataSource"
+                          datasource-classname="org.apache.derby.jdbc.ClientDataSource"
+                          ping="true"
+                          is-connection-validation-required="false">
+        <property name="User" value="APP"/>
+        <property name="Password" value="APP"/>
+        <property name="DatabaseName" value="SmartGrocery"/>
+        <property name="ServerName" value="localhost"/>
+        <property name="PortNumber" value="1527"/>
+        <property name="connectionAttributes" value=";create=true"/>
+    </jdbc-connection-pool>
+    <jdbc-resource jndi-name="jdbc/SmartGroceryPool" pool-name="SmartGroceryPool"/>
+</resources>

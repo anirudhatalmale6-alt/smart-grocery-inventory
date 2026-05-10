@@ -1,0 +1,71 @@
+=====================================================
+  SmartGroceryRules - Shared Business Logic Library
+  Setup Guide
+=====================================================
+
+OVERVIEW:
+This is a Java library project that contains reusable
+business rules shared between the Web Application
+(SmartGroceryInventory) and the Desktop Application
+(SmartGroceryDesktop).
+
+PROJECT STRUCTURE:
+SmartGroceryRules/
+  src/com/grocery/rules/
+    ValidationResult.java  - Result holder for validation
+    GroceryItemRules.java  - Rules 1, 2, 3
+    SupplierRules.java     - Rule 4
+    CategoryRules.java     - Rule 5
+
+THE 5 BUSINESS RULES:
+=====================
+
+Rule 1: Expiry Date Validation (GroceryItemRules)
+  - Items cannot have past expiry dates
+  - Warning if item expires within 7 days
+  - Perishable categories (Dairy, Fruits, Vegetables,
+    Bakery, Meat, Seafood) cannot have expiry > 1 year
+
+Rule 2: Inventory Limits (GroceryItemRules)
+  - Quantity must be between 1 and 10,000
+  - Price must be between $0.01 and $9,999.99
+  - Total value (qty x price) cannot exceed $50,000
+  - Warning for large orders over 5,000 units
+
+Rule 3: Duplicate Item Prevention (GroceryItemRules)
+  - Cannot add two items with the same name AND brand
+  - Case-insensitive comparison
+
+Rule 4: Supplier Contact Validation (SupplierRules)
+  - Email must contain '@' with valid domain
+  - Phone must have at least 10 digits
+  - Supplier name must be at least 2 characters
+  - Contact person must be at least 2 characters
+  - Address is required
+
+Rule 5: Category Storage Consistency (CategoryRules)
+  - Aisle number must be between 1 and 50
+  - Min stock level must be between 1 and 1000
+  - Perishable items MUST use Refrigerated or Frozen storage
+  - Warning if non-perishable items use Frozen storage
+
+HOW TO BUILD THE JAR:
+1. Open the project in NetBeans
+2. Right-click -> Build (or Clean and Build)
+3. The JAR will be created at dist/SmartGroceryRules.jar
+
+HOW TO USE IN OTHER PROJECTS:
+1. Copy SmartGroceryRules.jar to the other project:
+   - Web app: web/WEB-INF/lib/SmartGroceryRules.jar
+   - Desktop: lib/SmartGroceryRules.jar
+2. In NetBeans, right-click project -> Properties
+   -> Libraries -> Add JAR/Folder
+3. Import and use:
+   import com.grocery.rules.GroceryItemRules;
+   import com.grocery.rules.ValidationResult;
+
+   ValidationResult result = GroceryItemRules.validateAll(
+       name, brand, category, qty, price, expiryDate);
+   if (!result.isValid()) {
+       // Show result.getErrorMessage()
+   }

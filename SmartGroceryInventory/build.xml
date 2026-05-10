@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This build script is used by NetBeans IDE -->
+<project name="SmartGroceryInventory" default="default" basedir=".">
+    <description>Builds, tests, and runs the project SmartGroceryInventory.</description>
+    <import file="nbproject/build-impl.xml"/>
+</project>

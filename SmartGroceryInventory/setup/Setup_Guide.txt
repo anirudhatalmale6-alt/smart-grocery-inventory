@@ -1,0 +1,161 @@
+============================================================
+ SMART GROCERY INVENTORY MANAGEMENT SYSTEM
+ Setup & Deployment Guide
+============================================================
+
+PREREQUISITES:
+- Java JDK 8 or 17
+- NetBeans IDE (Apache NetBeans)
+- GlassFish 5.1.0 Server
+- Apache Derby Database (included with GlassFish)
+
+============================================================
+STEP 1: IMPORT THE PROJECT
+============================================================
+1. Open NetBeans IDE
+2. Go to File > Import Project > From ZIP
+3. Select the SmartGroceryInventory.zip file
+4. Click Import
+
+============================================================
+STEP 2: START THE DERBY DATABASE
+============================================================
+1. In NetBeans, go to the Services tab
+2. Expand "Databases"
+3. Right-click on "Java DB" and select "Start Server"
+4. The Derby database server will start on port 1527
+
+============================================================
+STEP 3: CREATE THE DATABASE
+============================================================
+1. In NetBeans Services tab, right-click "Java DB"
+2. Select "Create Database..."
+3. Enter:
+   - Database Name: SmartGrocery
+   - User Name: APP
+   - Password: APP
+4. Click OK
+
+============================================================
+STEP 4: RUN THE SQL SCRIPTS
+============================================================
+1. In the Services tab, expand Databases
+2. Find and connect to the SmartGrocery database
+   (jdbc:derby://localhost:1527/SmartGrocery)
+3. Right-click the connection and select "Execute Command..."
+4. Open and run: setup/Create_SmartGrocery.sql
+   (This creates the 3 tables: GROCERY_ITEM, SUPPLIER, CATEGORY)
+5. Optionally run: setup/Load_Sample_Data.sql
+   (This adds sample data to test with)
+
+============================================================
+STEP 5: CONFIGURE GLASSFISH CONNECTION POOL
+============================================================
+1. Start GlassFish Server (if not already running)
+2. Open GlassFish Admin Console: http://localhost:4848
+3. Go to Resources > JDBC > JDBC Connection Pools
+4. Click on "DerbyPool" (or create a new pool)
+5. Go to "Additional Properties" tab
+6. Set these properties:
+   - DatabaseName: SmartGrocery
+   - User: APP
+   - Password: APP
+   - ServerName: localhost
+   - PortNumber: 1527
+7. Click Save
+8. Click "Ping" to test the connection
+
+9. Go to Resources > JDBC > JDBC Resources
+10. Create a new JDBC Resource:
+    - JNDI Name: jdbc/SmartGroceryPool
+    - Pool Name: DerbyPool (or your custom pool)
+11. Click OK
+
+============================================================
+STEP 6: ADD REQUIRED LIBRARIES
+============================================================
+In NetBeans, right-click the project > Properties > Libraries:
+- Add: Jakarta EE 8 API Library (or Java EE 7 API)
+- Add: EclipseLink (JPA 2.0)
+- Add: GlassFish runtime libraries (if not already included)
+
+============================================================
+STEP 7: DEPLOY AND RUN
+============================================================
+1. Right-click the project in NetBeans
+2. Select "Clean and Build"
+3. Then select "Run"
+4. The application will deploy to GlassFish and open in browser
+5. Default URL: http://localhost:8080/SmartGroceryInventory/
+
+============================================================
+ARCHITECTURE FLOW
+============================================================
+JSP Form (user input)
+   |
+   v
+Servlet (collects parameters, creates entity, calls facade)
+   |
+   v
+Session/Facade Class (EJB - manages persistence)
+   |
+   v
+Entity Class (JPA - maps to database table)
+   |
+   v
+Derby Database (stores the data)
+
+============================================================
+PROJECT STRUCTURE
+============================================================
+SmartGroceryInventory/
+├── src/java/com/grocery/
+│   ├── entity/              (JPA Entity Classes)
+│   │   ├── GroceryItem.java
+│   │   ├── Supplier.java
+│   │   └── Category.java
+│   ├── session/             (EJB Session Facades)
+│   │   ├── AbstractFacade.java
+│   │   ├── GroceryItemFacade.java
+│   │   ├── GroceryItemFacadeLocal.java
+│   │   ├── SupplierFacade.java
+│   │   ├── SupplierFacadeLocal.java
+│   │   ├── CategoryFacade.java
+│   │   └── CategoryFacadeLocal.java
+│   └── servlets/            (Servlet Controllers)
+│       ├── GroceryItemServlet.java
+│       ├── SupplierServlet.java
+│       └── CategoryServlet.java
+├── src/conf/META-INF/
+│   └── persistence.xml      (JPA Configuration - JTA)
+├── web/
+│   ├── index.jsp            (Homepage Dashboard)
+│   ├── addGroceryItem.jsp   (Add Item Form)
+│   ├── addSupplier.jsp      (Add Supplier Form)
+│   ├── addCategory.jsp      (Add Category Form)
+│   ├── viewGroceryItems.jsp (View All Items Table)
+│   ├── viewSuppliers.jsp    (View All Suppliers Table)
+│   ├── viewCategories.jsp   (View All Categories Table)
+│   ├── editGroceryItem.jsp  (Edit Item Form)
+│   ├── editSupplier.jsp     (Edit Supplier Form)
+│   ├── editCategory.jsp     (Edit Category Form)
+│   ├── css/style.css        (Stylesheet)
+│   └── WEB-INF/
+│       ├── web.xml
+│       └── glassfish-web.xml
+└── setup/
+    ├── Create_SmartGrocery.sql   (Create Tables)
+    ├── Drop_SmartGrocery.sql     (Drop Tables)
+    ├── Load_Sample_Data.sql      (Sample Data)
+    └── Setup_Guide.txt           (This file)
+
+============================================================
+TROUBLESHOOTING
+============================================================
+- If database connection fails: Check that Derby is running
+  and the database name matches in GlassFish Admin Console
+- If servlet errors occur: Verify the persistence.xml has
+  the correct persistence unit name and JTA data source
+- If tables don't exist: Run Create_SmartGrocery.sql first
+- Check GlassFish server log for System.out.println output
+  (shows data reaching the middle tier)
