@@ -1,0 +1,39 @@
+Smart Grocery Inventory - Mobile Application (Kivy)
+====================================================
+
+PREREQUISITES:
+1. Python 3.x installed (with pip)
+2. SmartGroceryInventory web app running on GlassFish
+
+INSTALLATION:
+1. Open Command Prompt or Terminal
+2. Run: pip install "kivy[base]"
+   (If pip error, try: python -m pip install "kivy[base]")
+
+RUNNING THE APP:
+1. Make sure GlassFish is running with SmartGroceryInventory deployed
+2. Open Command Prompt / Terminal
+3. Navigate to this folder: cd SmartGroceryMobile
+4. Run: python main.py
+
+USAGE:
+- The app has 3 tabs: Grocery Items, Suppliers, Categories
+- Tap "Load All" to fetch all records from the web service
+- Tap "Get Count" to see total number of records
+- Enter an ID and tap "Find by ID" to look up a specific record
+- The Server URL at the top can be changed if your GlassFish
+  runs on a different port or hostname
+
+DEFAULT SERVER URL:
+  http://localhost:8080/SmartGroceryInventory/api
+
+REST ENDPOINTS USED:
+  GET /api/groceryitems      - All grocery items
+  GET /api/groceryitems/{id} - Single item by ID
+  GET /api/groceryitems/count - Item count
+  GET /api/suppliers         - All suppliers
+  GET /api/suppliers/{id}    - Single supplier by ID
+  GET /api/suppliers/count   - Supplier count
+  GET /api/categories        - All categories
+  GET /api/categories/{id}   - Single category by ID
+  GET /api/categories/count  - Category count
